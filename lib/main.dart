@@ -53,6 +53,7 @@ class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var viewModel = Provider.of<LoginViewModel>(context);
+    var enableLogin = viewModel.id.isNotEmpty && viewModel.password.isNotEmpty;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -109,8 +110,18 @@ class LoginForm extends StatelessWidget {
               children: [
                 Expanded(
                   child: FilledButton(
-                    onPressed: (viewModel.id.isNotEmpty && viewModel.password.isNotEmpty)
-                        ? () => viewModel.login()
+                    onPressed: (enableLogin)
+                        ? () async {
+                            onSuccess() => showLoginDialog(context, true);
+                            onFail() => showLoginDialog(context, false);
+
+                            final success = await viewModel.login();
+                            if (success) {
+                              onSuccess();
+                            } else {
+                              onFail();
+                            }
+                          }
                         : null,
                     style: OutlinedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -133,6 +144,26 @@ class LoginForm extends StatelessWidget {
       ),
     );
   }
+
+  void showLoginDialog(BuildContext context, bool success) {
+    showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            success ? const Text("Success") : const Text("Fail"),
+            const SizedBox(height: 8),
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("close"),
+            ),
+          ],
+        ),
+      );
+    });
+  }
 }
 
 class LoginViewModel extends ChangeNotifier {
@@ -153,7 +184,16 @@ class LoginViewModel extends ChangeNotifier {
     });
   }
 
-  void login() {
+  bool inProgress = false;
 
+  Future<bool> login() async {
+    inProgress = true;
+    notifyListeners();
+
+    await Future.delayed(const Duration(seconds: 3));
+    inProgress = false;
+    notifyListeners();
+
+    return id == 'aaa' && password == 'aaa';
   }
 }

@@ -349,4 +349,80 @@ class LoginForm extends StatelessWidget {
 
 ```
 
+## 로그인 하는 느낌 주기 
 
+```dart
+class LoginViewModel extends ChangeNotifier {
+  ....
+      
+  bool inProgress = false;
+
+  Future<bool> login() async {
+    inProgress = true;
+    notifyListeners();
+
+    await Future.delayed(const Duration(seconds: 3));
+    inProgress = false;
+    notifyListeners();
+
+    return id == 'aaa' && password == 'aaa';
+  }
+}
+```
+
+```dart
+// LoginForm
+
+void showLoginDialog(BuildContext context, bool success) {
+  showDialog(context: context, builder: (context) {
+    return AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          success ? const Text("Success") : const Text("Fail"),
+          const SizedBox(height: 8),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("close"),
+          ),
+        ],
+      ),
+    );
+  });
+}
+
+
+
+```
+
+
+```dart
+  var enableLogin = viewModel.id.isNotEmpty && viewModel.password.isNotEmpty;
+
+  ....
+
+  FilledButton(
+    onPressed: (enableLogin)
+        ? () async {
+            onSuccess() => showLoginDialog(context, true);
+            onFail() => showLoginDialog(context, false);
+
+            final success = await viewModel.login();
+            if (success) {
+              onSuccess();
+            } else {
+              onFail();
+            }
+          }
+        : null,
+    style: OutlinedButton.styleFrom(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      side: const BorderSide(width: 1),
+    ),
+    child: const Text("Login"),
+  )
+```
