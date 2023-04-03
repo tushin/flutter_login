@@ -64,7 +64,6 @@ class LoginScreen extends StatelessWidget {
                 onPressed: () {},
                 child: const Text("Login"),
               ),
-              const SizedBox(height: 12),
               const Spacer(),
               TextButton(
                 onPressed: () {},
@@ -80,33 +79,79 @@ class LoginScreen extends StatelessWidget {
 ```
 ### 입력창 꾸미기 
 ```dart
-              TextFormField(
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.account_circle),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(35.0),
-                    ),
+  @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          children: [
+            const Spacer(),
+            const Text(
+              'Lorem Ipsum',
+              style: TextStyle(fontSize: 40),
+            ),
+            const Spacer(),
+            TextFormField(
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.account_circle),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(35.0),
                   ),
-                  hintText: "User name",
-                  hintStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(10),
                 ),
+                hintText: "User name",
+                hintStyle: TextStyle(fontSize: 14),
+                contentPadding: EdgeInsets.all(10),
               ),
-              const SizedBox(height: 8),
-              TextFormField(
-                obscureText: true,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.password),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(35.0),
-                    ),
+            ),
+            const SizedBox(height: 8),
+            TextFormField(
+              obscureText: true,
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.password),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(35.0),
                   ),
-                  hintText: "Password",
-                  hintStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(10),
                 ),
+                hintText: "Password",
+                hintStyle: TextStyle(fontSize: 14),
+                contentPadding: EdgeInsets.all(10),
               ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton(
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(20),
+                      ),
+                      side: const BorderSide(width: 1),
+                    ),
+                    child: const Text("Login"),
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            TextButton(
+              onPressed: () {},
+              child: const Text('Create an account.'),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+
 ```
+
 

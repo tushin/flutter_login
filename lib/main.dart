@@ -38,7 +38,7 @@ class LoginScreen extends StatelessWidget {
               TextFormField(
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.account_circle),
-                  enabledBorder: OutlineInputBorder(
+                  border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(35.0),
                     ),
@@ -53,7 +53,7 @@ class LoginScreen extends StatelessWidget {
                 obscureText: true,
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.password),
-                  enabledBorder: OutlineInputBorder(
+                  border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(35.0),
                     ),
@@ -64,11 +64,23 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              FilledButton(
-                onPressed: () {},
-                child: const Text("Login"),
+              Row(
+                children: [
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(20),
+                        ),
+                        side: const BorderSide(width: 1),
+                      ),
+                      child: const Text("Login"),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 12),
               const Spacer(),
               TextButton(
                 onPressed: () {},
