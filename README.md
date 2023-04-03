@@ -426,3 +426,148 @@ void showLoginDialog(BuildContext context, bool success) {
     child: const Text("Login"),
   )
 ```
+
+
+### 로딩인디케이터 돌리기 
+
+```dart
+class LoginForm extends StatelessWidget {
+  const LoginForm({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var viewModel = Provider.of<LoginViewModel>(context);
+    var enableLogin = viewModel.id.isNotEmpty && viewModel.password.isNotEmpty;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          children: [
+            const Spacer(),
+            const Text(
+              'Lorem Ipsum',
+              style: TextStyle(fontSize: 40, fontFamily: 'Woodshop'),
+            ),
+            const Spacer(),
+            TextFormField(
+              controller: viewModel._idController,
+              enabled: !viewModel.inProgress,                     // <---- 요기 
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.account_circle),
+                suffixIcon: viewModel.id.isNotEmpty
+                    ? IconButton(
+                        onPressed: () => viewModel._idController.clear(),
+                        icon: const Icon(Icons.clear))
+                    : null,
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(35.0),
+                  ),
+                ),
+                hintText: "User name",
+                hintStyle: const TextStyle(fontSize: 14),
+                contentPadding: const EdgeInsets.all(10),
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: viewModel._passwordController,
+              enabled: !viewModel.inProgress,                     // <---- 요기 
+              obscureText: true,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.password),
+                suffixIcon: viewModel.password.isNotEmpty
+                    ? IconButton(
+                    onPressed: () => viewModel._passwordController.clear(),
+                    icon: const Icon(Icons.clear))
+                    : null,
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(35.0),
+                  ),
+                ),
+                hintText: "Password",
+                hintStyle: const TextStyle(fontSize: 14),
+                contentPadding: const EdgeInsets.all(10),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton(
+                    onPressed: (enableLogin && !viewModel.inProgress)                     // <---- 요기 
+                        ? () async {
+                            onSuccess() => showLoginDialog(context, true);
+                            onFail() => showLoginDialog(context, false);
+
+                            final success = await viewModel.login();
+                            if (success) {
+                              onSuccess();
+                            } else {
+                              onFail();
+                            }
+                          }
+                        : null,
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      side: const BorderSide(width: 1),
+                    ),
+                    child: Row(                     // <---- 요기서 부터 
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(width: 14),
+                        const Text("Login"),
+                        SizedBox(
+                            width: 14,
+                            height: 14,
+                            child: viewModel.inProgress
+                                ? const CircularProgressIndicator()
+                                : null
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            TextButton(
+              onPressed: () {},
+              child: const Text('Create an account.'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void showLoginDialog(BuildContext context, bool success) {
+    showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            success ? const Text("Success") : const Text("Fail"),
+            const SizedBox(height: 8),
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("close"),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+```
+
+
+### END !

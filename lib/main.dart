@@ -67,6 +67,7 @@ class LoginForm extends StatelessWidget {
             const Spacer(),
             TextFormField(
               controller: viewModel._idController,
+              enabled: !viewModel.inProgress,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.account_circle),
                 suffixIcon: viewModel.id.isNotEmpty
@@ -87,6 +88,7 @@ class LoginForm extends StatelessWidget {
             const SizedBox(height: 8),
             TextFormField(
               controller: viewModel._passwordController,
+              enabled: !viewModel.inProgress,
               obscureText: true,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.password),
@@ -110,7 +112,7 @@ class LoginForm extends StatelessWidget {
               children: [
                 Expanded(
                   child: FilledButton(
-                    onPressed: (enableLogin)
+                    onPressed: (enableLogin && !viewModel.inProgress)
                         ? () async {
                             onSuccess() => showLoginDialog(context, true);
                             onFail() => showLoginDialog(context, false);
@@ -129,7 +131,20 @@ class LoginForm extends StatelessWidget {
                       ),
                       side: const BorderSide(width: 1),
                     ),
-                    child: const Text("Login"),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(width: 14),
+                        const Text("Login"),
+                        SizedBox(
+                            width: 14,
+                            height: 14,
+                            child: viewModel.inProgress
+                                ? const CircularProgressIndicator()
+                                : null
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],
