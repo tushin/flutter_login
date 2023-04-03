@@ -175,7 +175,7 @@ assets 디렉토리를 만들고 그 하위에 images, fonts 디렉토리를 각
         - asset: assets/fonts/Woodshop-Regular.otf
 ```
 
-` Scaffold 하위의 Center Widget 을 LoginForm 으로 Extract`
+`Scaffold 하위의 Center Widget 을 LoginForm 으로 Extract`
 
 ```dart
 class LoginScreen extends StatelessWidget {
@@ -211,19 +211,34 @@ class LoginScreen extends StatelessWidget {
 
 ## MVVM 만들어 보기 
 
-` flutter pub add provider `
+`flutter pub add provider`
 
 ```dart
-class LoginForm extends StatelessWidget {
-  const LoginForm({super.key,});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => LoginViewModel(),
-        child: Center(
-          child: Padding(
-          ...
+      create: (context) => LoginViewModel(),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Image.asset(
+                "assets/images/login_bg.jpg",
+                fit: BoxFit.cover,
+              ),
+            ),
+            const LoginForm(),
+          ],
+        ),
+      ),
+    );
+  }
+}
 ```
 
 ```dart
@@ -231,3 +246,107 @@ class LoginViewModel extends ChangeNotifier {
 
 }
 ```
+
+## 입력에 따른 UI 내용 변경 
+키보드 입력에 따라 X 버튼 노출 제어 
+login 버튼 활성화 여부 제어 
+
+```dart
+class LoginViewModel extends ChangeNotifier {
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  String id = "";
+  String password = "";
+
+  LoginViewModel() {
+    _idController.addListener(() {
+      id = _idController.text;
+      notifyListeners();
+    });
+    _passwordController.addListener(() {
+      password = _passwordController.text;
+      notifyListeners();
+    });
+  }
+
+  void login() {
+
+  }
+}
+
+```
+
+```dart
+class LoginForm extends StatelessWidget {
+  const LoginForm({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var viewModel = Provider.of<LoginViewModel>(context);   // <-- 요기 
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          children: [
+            ...,
+            TextFormField(
+              controller: viewModel._idController,          // <-- 요기 
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.account_circle),
+                suffixIcon: viewModel.id.isNotEmpty          // <-- 요기
+                    ? IconButton(
+                        onPressed: () => viewModel._idController.clear(),
+                        icon: const Icon(Icons.clear))
+                    : null,
+                
+                ....
+                  
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: viewModel._passwordController,          // <-- 요기
+              obscureText: true,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.password),
+                suffixIcon: viewModel.password.isNotEmpty          // <-- 요기
+                    ? IconButton(
+                    onPressed: () => viewModel._passwordController.clear(),
+                    icon: const Icon(Icons.clear))
+                    : null,
+                
+                ....
+
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton(
+                    onPressed: (viewModel.id.isNotEmpty && viewModel.password.isNotEmpty)          // <-- 요기
+                        ? () => viewModel.login()
+                        : null,
+                    
+                    ....
+                    
+                  ),
+                ),
+              ],
+            ),
+            
+            ....
+          
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+```
+
+
