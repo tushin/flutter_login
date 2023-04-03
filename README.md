@@ -154,4 +154,58 @@ Widget build(BuildContext context) {
 
 ```
 
+## 리소스 추가 + 디자인 작업
+assets 디렉토리를 만들고 그 하위에 images, fonts 디렉토리를 각각 만든다. 
+`
+```
+>  Project   
+    > assets  
+        > fonts  
+        > images     
+```
+
+```yaml
+# pubspec.yaml
+  assets:
+    - assets/images
+
+  fonts:
+    - family: Woodshop
+      fonts:
+        - asset: assets/fonts/Woodshop-Regular.otf
+```
+
+> Scaffold 하위의 Center Widget 을 LoginForm 으로 Extract
+
+```dart
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Image.asset(
+              "assets/images/login_bg.jpg",
+              fit: BoxFit.cover,
+            ),
+          ),
+          const LoginForm(),
+        ],
+      ),
+    );
+  }
+}
+```
+
+```dart
+            const Text(
+              'Lorem Ipsum',
+              style: TextStyle(fontSize: 40, fontFamily: 'Woodshop'),
+            ),
+```
 
