@@ -175,7 +175,7 @@ assets 디렉토리를 만들고 그 하위에 images, fonts 디렉토리를 각
         - asset: assets/fonts/Woodshop-Regular.otf
 ```
 
-> Scaffold 하위의 Center Widget 을 LoginForm 으로 Extract
+` Scaffold 하위의 Center Widget 을 LoginForm 으로 Extract`
 
 ```dart
 class LoginScreen extends StatelessWidget {
@@ -209,3 +209,25 @@ class LoginScreen extends StatelessWidget {
             ),
 ```
 
+## MVVM 만들어 보기 
+
+` flutter pub add provider `
+
+```dart
+class LoginForm extends StatelessWidget {
+  const LoginForm({super.key,});
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+        create: (context) => LoginViewModel(),
+        child: Center(
+          child: Padding(
+          ...
+```
+
+```dart
+class LoginViewModel extends ChangeNotifier {
+
+}
+```
