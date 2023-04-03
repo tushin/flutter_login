@@ -1,16 +1,112 @@
-# flutter_login
+## START!
+```dart
+//main.dart
+import 'package:flutter/material.dart';
 
-A new Flutter project.
+import 'color_schemes.g.dart';
 
-## Getting Started
+void main() => runApp(const MyApp());
 
-This project is a starting point for a Flutter application.
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
-A few resources to get you started if this is your first Flutter project:
+  @override
+  Widget build(BuildContext context) {
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+    return MaterialApp(
+      title: 'Video Demo',
+      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      home: const LoginScreen(),
+    );
+  }
+}
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+```
+
+`
+머티리얼 테마 컬러 만들기 : {https://m3.material.io/theme-builder#/dynamic}
+`
+
+## 로그인 폼 만들기 
+```dart
+//main.dart
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            children: [
+              const Spacer(),
+              const Text(
+                'Lorem Ipsum',
+                style: TextStyle(fontSize: 40),
+              ),
+              const Spacer(),
+              TextFormField(),
+              const SizedBox(height: 8),
+              TextFormField(),
+              const SizedBox(height: 12),
+              FilledButton(
+                onPressed: () {},
+                child: const Text("Login"),
+              ),
+              const SizedBox(height: 12),
+              const Spacer(),
+              TextButton(
+                onPressed: () {},
+                child: const Text('Create an account.'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+### 입력창 꾸미기 
+```dart
+              TextFormField(
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.account_circle),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(35.0),
+                    ),
+                  ),
+                  hintText: "User name",
+                  hintStyle: TextStyle(fontSize: 14),
+                  contentPadding: EdgeInsets.all(10),
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextFormField(
+                obscureText: true,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.password),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(35.0),
+                    ),
+                  ),
+                  hintText: "Password",
+                  hintStyle: TextStyle(fontSize: 14),
+                  contentPadding: EdgeInsets.all(10),
+                ),
+              ),
+```
+
